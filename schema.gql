@@ -14,6 +14,11 @@ type Book {
   title: String!
 }
 
+type Employee implements User {
+  id: ID!
+  name: String!
+}
+
 type Library {
   books: [Book!]!
   branch: String!
@@ -36,4 +41,20 @@ type Recipe {
 
   """The title of the recipe"""
   title: String!
+  user: User!
+}
+
+type Student implements User {
+  id: ID!
+  name: String!
+}
+
+interface User {
+  id: ID!
+  name: String!
+}
+
+type UserType implements User {
+  id: ID!
+  name: String!
 }

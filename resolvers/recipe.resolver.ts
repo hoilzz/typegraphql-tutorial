@@ -10,11 +10,13 @@ import {
   Mutation,
   Query,
   Resolver,
+  ResolverInterface,
   Root,
 } from 'type-graphql';
 import { FileWatcherEventKind } from 'typescript';
 import Recipe from '../typedefs/recipe';
 import * as fakeDb from '../db/fakeDb';
+import User from '../typedefs/user';
 
 @ArgsType()
 export class GetRecipesArgs {
@@ -50,10 +52,12 @@ export class AddRecipeInput {
 }
 
 @Resolver((of) => Recipe)
-class RecipeResolver {
+class RecipeResolver implements ResolverInterface<Recipe> {
   // private recipesCollection: Recipe[] = [];
   @Query((returns) => [Recipe])
-  async recipes(@Args() { endIndex, title, startIndex }: GetRecipesArgs) {
+  async recipes(
+    @Args() { endIndex, title, startIndex }: GetRecipesArgs
+  ): Promise<Recipe[]> {
     let recipes = await fakeDb.getRecipes();
     if (title) {
       recipes = recipes.filter((recipe) => recipe.title === title);
@@ -80,6 +84,14 @@ class RecipeResolver {
     return recipe.ratings.length
       ? recipe.ratings.reduce((a, rate) => a + rate, 0) / recipe.ratings.length
       : null;
+  }
+
+  @FieldResolver()
+  user(@Root() recipe: Recipe): User {
+    if (recipe.user) {
+      return recipe.user;
+    }
+    return { id: '4', name: 'none' };
   }
 }
 

@@ -3,11 +3,15 @@ import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server';
 import * as path from 'path';
+import User, { UserType } from './typedefs/user';
+import Student from './typedefs/student';
+import Employee from './typedefs/employee';
 
 async function bootstrap() {
   const schema = await buildSchema({
     resolvers: [__dirname + '/**/*.resolver.{ts,js}'],
     emitSchemaFile: path.resolve(__dirname, 'schema.gql'),
+    orphanedTypes: [Student, Employee, User, UserType],
   });
 
   const server = new ApolloServer({
