@@ -3,6 +3,7 @@ import {
   Arg,
   Args,
   ArgsType,
+  Ctx,
   Field,
   FieldResolver,
   InputType,
@@ -13,7 +14,6 @@ import {
   ResolverInterface,
   Root,
 } from 'type-graphql';
-import { FileWatcherEventKind } from 'typescript';
 import Recipe from '../typedefs/recipe';
 import * as fakeDb from '../db/fakeDb';
 import User from '../typedefs/user';
@@ -22,28 +22,19 @@ import User from '../typedefs/user';
 export class GetRecipesArgs {
   @Field((type) => Int)
   @Min(0)
-  skip = 0;
+  start = 0;
 
   @Field((type) => Int, { nullable: true })
   @Min(1)
   @Max(50)
-  take = 25;
+  end = 25;
 
   @Field({ nullable: true })
   title?: string;
-
-  // helpers - index calculation
-  get startIndex(): number {
-    return this.skip;
-  }
-
-  get endIndex(): number {
-    return this.skip + this.take;
-  }
 }
 
 @InputType({ description: 'New recipe data' })
-export class AddRecipeInput {
+export class AddRecipeInput implements Partial<Recipe> {
   @Field()
   title: string;
 
@@ -51,43 +42,33 @@ export class AddRecipeInput {
   description?: string;
 }
 
-@Resolver((of) => Recipe)
+@Resolver(() => Recipe)
 class RecipeResolver implements ResolverInterface<Recipe> {
-  // private recipesCollection: Recipe[] = [];
-  @Query((returns) => [Recipe])
+  @Query(() => [Recipe])
   async recipes(
-    @Args() { endIndex, title, startIndex }: GetRecipesArgs
+    @Args() { title, start, end }: GetRecipesArgs
   ): Promise<Recipe[]> {
     let recipes = await fakeDb.getRecipes();
     if (title) {
       recipes = recipes.filter((recipe) => recipe.title === title);
     }
-    return recipes.slice(startIndex, endIndex);
+    return recipes.slice(start, end);
   }
 
-  @Mutation()
-  addRecipe(@Arg('data') newRecipeData: AddRecipeInput): Recipe {
+  @Mutation(() => Recipe)
+  addRecipe(
+    @Arg('data') newReciptData: AddRecipeInput,
+    @Ctx() ctx: User
+  ): Recipe {
     const recipe: Recipe = {
-      id: 'asd',
-      // ratings: [],
-      title: 'title',
+      id: '100',
+      ...newReciptData,
     };
     return recipe;
-    // sample implementation
-    // const recipe = RecipesUtils.create(newRecipeData, ctx.user);
-    // this.recipesCollection.push(recipe);
-    // return recipe;
   }
 
-  @FieldResolver()
-  averageRating(@Root() recipe: Recipe) {
-    return recipe.ratings.length
-      ? recipe.ratings.reduce((a, rate) => a + rate, 0) / recipe.ratings.length
-      : null;
-  }
-
-  @FieldResolver()
-  user(@Root() recipe: Recipe): User {
+  @FieldResolver(() => User)
+  user(@Root() recipe: Recipe) {
     if (recipe.user) {
       return recipe.user;
     }

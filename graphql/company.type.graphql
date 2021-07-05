@@ -1,0 +1,4 @@
+type Company implements User {
+	id: ID!;
+	name: string;
+}

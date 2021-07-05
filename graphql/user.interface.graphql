@@ -1,0 +1,4 @@
+interface User {
+	id: ID!;
+	name: string;
+}

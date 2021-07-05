@@ -9,19 +9,25 @@ input AddRecipeInput {
   title: String!
 }
 
-type Book {
-  author: String!
-  title: String!
+type Bar implements IFooBar {
+  fooBarKind: String!
 }
 
-type Employee implements User {
+type Company implements User {
   id: ID!
   name: String!
 }
 
-type Library {
-  books: [Book!]!
-  branch: String!
+type Foo implements IFooBar {
+  fooBarKind: String!
+}
+
+type FooBar {
+  iFooBarField: IFooBar!
+}
+
+interface IFooBar {
+  fooBarKind: String!
 }
 
 type Mutation {
@@ -29,19 +35,18 @@ type Mutation {
 }
 
 type Query {
-  libraries: [Library!]!
-  recipes(skip: Int = 0, take: Int = 25, title: String): [Recipe!]!
+  foobar: FooBar!
+  recipes(end: Int = 25, start: Int = 0, title: String): [Recipe!]!
+  user: User!
 }
 
-"""The recipe model"""
 type Recipe {
-  averageRating: Float
   id: ID!
-  ratings: [Int!]!
-
-  """The title of the recipe"""
+  ratings: [Int!]
   title: String!
-  user: User!
+
+  """레시피 주인"""
+  user: User
 }
 
 type Student implements User {
@@ -50,11 +55,6 @@ type Student implements User {
 }
 
 interface User {
-  id: ID!
-  name: String!
-}
-
-type UserType implements User {
   id: ID!
   name: String!
 }

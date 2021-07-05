@@ -2,11 +2,10 @@ import { Field, ID, InterfaceType, ObjectType } from 'type-graphql';
 
 @InterfaceType({
   resolveType: (value) => {
-    console.log('valuie: ', value.constructor.name);
-    if (value.name === 'seoul') {
+    if (value.name === '학생') {
       return 'Student';
     }
-    return 'Employee';
+    return 'Company';
   },
 })
 abstract class User {
@@ -16,13 +15,11 @@ abstract class User {
   @Field()
   name?: string;
 }
-console.log('in User: ', User);
 
 @ObjectType({ implements: User })
-export class UserType implements User {
-  id: string;
-  name?: string;
-}
-console.log('in UserType: ', UserType);
+class Student extends User {}
+
+@ObjectType({ implements: User })
+class Company extends User {}
 
 export default User;

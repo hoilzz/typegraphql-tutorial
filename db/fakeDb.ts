@@ -1,35 +1,32 @@
 const recipes = [
   {
     id: '1',
-    description: 'Desc 1',
-    title: 'Recipe 1',
+    description: '된장국',
+    title: '된장국',
     ratings: [1, 2, 3],
-    creationDate: new Date('2018-04-11'),
     user: {
       id: '1',
-      name: 'google',
+      name: '학생',
     },
   },
   {
     id: '2',
-    description: 'Desc 2',
-    title: 'Recipe 2',
+    description: '라면',
+    title: '진진짜라',
     ratings: [5, 5, 5],
-    creationDate: new Date('2018-04-15'),
     user: {
       id: '2',
-      name: 'naver',
+      name: '농심',
     },
   },
   {
     id: '3',
-    description: 'Desc 3',
-    title: 'Recipe 3',
+    description: '더블패티',
+    title: '와퍼',
     ratings: [1, 2, 5],
-    creationDate: new Date(),
     user: {
       id: '3',
-      name: 'seoul',
+      name: '버거킹',
     },
   },
 ];

@@ -1,0 +1,4 @@
+type Student implements User {
+	id: ID!;
+	name: string;
+}
