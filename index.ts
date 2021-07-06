@@ -3,9 +3,7 @@ import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server';
 import * as path from 'path';
-import User from './typedefs/user';
-// import Student from './typedefs/student';
-// import Employee from './typedefs/employee';
+import User from './typedefs/user.interface';
 
 async function bootstrap() {
   const schema = await buildSchema({

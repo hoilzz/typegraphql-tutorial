@@ -14,9 +14,9 @@ import {
   ResolverInterface,
   Root,
 } from 'type-graphql';
-import Recipe from '../typedefs/recipe';
+import Recipe from '../typedefs/recipe.type';
 import * as fakeDb from '../db/fakeDb';
-import User from '../typedefs/user';
+import User from '../typedefs/user.interface';
 
 @ArgsType()
 export class GetRecipesArgs {
@@ -55,6 +55,14 @@ class RecipeResolver implements ResolverInterface<Recipe> {
     return recipes.slice(start, end);
   }
 
+  @FieldResolver()
+  user(@Root() recipe: Recipe) {
+    if (recipe.user) {
+      return recipe.user;
+    }
+    return { id: '4', name: 'none' };
+  }
+
   @Mutation(() => Recipe)
   addRecipe(
     @Arg('data') newReciptData: AddRecipeInput,
@@ -65,14 +73,6 @@ class RecipeResolver implements ResolverInterface<Recipe> {
       ...newReciptData,
     };
     return recipe;
-  }
-
-  @FieldResolver(() => User)
-  user(@Root() recipe: Recipe) {
-    if (recipe.user) {
-      return recipe.user;
-    }
-    return { id: '4', name: 'none' };
   }
 }
 

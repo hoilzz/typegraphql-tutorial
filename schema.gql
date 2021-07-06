@@ -46,7 +46,7 @@ type Recipe {
   title: String!
 
   """레시피 주인"""
-  user: User
+  user: User!
 }
 
 type Student implements User {

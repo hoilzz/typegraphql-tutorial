@@ -1,5 +1,5 @@
-import { Field, Float, ID, Int, ObjectType } from 'type-graphql';
-import User from './user';
+import { Field, ID, Int, ObjectType } from 'type-graphql';
+import User from './user.interface';
 
 @ObjectType()
 class Recipe {
@@ -12,7 +12,7 @@ class Recipe {
   @Field(() => [Int], { nullable: true })
   ratings?: number[];
 
-  @Field(() => User, { description: '레시피 주인', nullable: true })
+  @Field(() => User, { description: '레시피 주인' })
   user?: User;
 }
 
